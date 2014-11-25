@@ -10,11 +10,11 @@ class rpc(object):
     # receives confirmation from Node server 
     def hello(self, name):
         print "Node greeting request received, response sending..."
-        return "This is python. Hello, %s" % name    
+        return "This is python. Hello, %s" % name
 
     def nodeRequest(self, startTime, endTime):
         print "Node data request received, response sending..."
-        return connect(startTime, endTime)   
+        return connect(self, startTime, endTime)   
 
 server = zerorpc.Server(rpc())
 server.bind("tcp://0.0.0.0:4242")
