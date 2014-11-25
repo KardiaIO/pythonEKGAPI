@@ -2,6 +2,7 @@
 ## our Node.js server using Zerorpc
 
 import zerorpc
+from mssql import connect
 
 class rpc(object):
     print "Python server ENGAGE!"
@@ -11,11 +12,9 @@ class rpc(object):
         print "Node greeting request received, response sending..."
         return "This is python. Hello, %s" % name    
 
-    # passes simple data back to Node - takes array of numbers from Node, 
-    # squares them, passes them back (for testing purposes only)    
-    def processData(self, data):
+    def nodeRequest(self, startTime, endTime):
         print "Node data request received, response sending..."
-        return list(map((lambda x: x ** 2), data))
+        return connect(startTime, endTime)   
 
 server = zerorpc.Server(rpc())
 server.bind("tcp://0.0.0.0:4242")
