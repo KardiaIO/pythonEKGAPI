@@ -40,6 +40,6 @@ class rpc(object):
         print "Node data request received, response sending..."
         return connect()   
 
-server = zerorpc.Server(rpc())
-server.bind("tcp://*:4242")
+server = zerorpc.Server(rpc(), heartbeat=None)
+server.bind("tcp://*:5000")
 server.run()
