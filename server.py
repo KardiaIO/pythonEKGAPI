@@ -3,16 +3,29 @@
 
 import zerorpc
 import psycopg2
-# from mssql import connec t
+import os
+# from mssql import connect
+dbname = os.getenv('POSTGRES_DBNAME')
+user = os.getenv('POSTGRES_USER')
+host = os.getenv('POSTGRES_HOST')
+password = os.getenv('POSTGRES_PASS')
+port = os.getenv('POSTGRES_PORT')
+
+myString = ("dbname=" + dbname + " user=" + user + " host=" + host + " password=" + password + " port=" + port)
+def go():
+  print myString
+
+go()
 try:
-    conn = psycopg2.connect("dbname='ddkcjaloac929s' user='jtxtmxsnjirunx' host='ec2-54-83-23-169.compute-1.amazonaws.com' password='q8ojXZQTlVDqQSPy3y48CIRK0S' port='5432'")
+  conn = psycopg2.connect("dbname=" + dbname + " user=" + user + " host=" + host + " password=" + password + " port=" + port)
 except:
-    print "I am unable to connect to the database"
+  print "I am unable to connect to the database"
 
 def connect():  
   cursor = conn.cursor()
 
   try:
+    print "DO YOUSE WORK?"
     cursor.execute(" " "SELECT * from users" " ")
   except:
     print "Can't select from users"
@@ -28,10 +41,10 @@ class rpc(object):
         print "Node greeting request received, response sending..."
         return "This is python. Hello, %s" % name
 
-    def nodeRequest(self, startTime, endTime):
+    def nodeRequest(self):
         print "Node data request received, response sending..."
         return connect()   
 
 server = zerorpc.Server(rpc())
-server.bind("tcp://0.0.0.0:4242")
+server.bind("tcp://*:4242")
 server.run()
