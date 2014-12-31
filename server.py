@@ -5,15 +5,15 @@ import zerorpc
 import psycopg2
 import os
 # from mssql import connect
-dbname = os.getenv('POSTGRES_DBNAME')
-user = os.getenv('POSTGRES_USER')
-host = os.getenv('POSTGRES_HOST')
-password = os.getenv('POSTGRES_PASS')
-port = os.getenv('POSTGRES_PORT')
+POSTGRES_DBNAME = os.getenv('POSTGRES_DBNAME')
+POSTGRES_USER = os.getenv('POSTGRES_USER')
+POSTGRES_HOST = os.getenv('POSTGRES_HOST')
+POSTGRES_PASS = os.getenv('POSTGRES_PASS')
+POSTGRES_PORT = os.getenv('POSTGRES_PORT')
 fiveThousand = 5000
 
 try:
-  conn = psycopg2.connect("dbname=" + dbname + " user=" + user + " host=" + host + " password=" + password + " port=" + port)
+  conn = psycopg2.connect("dbname=" + POSTGRES_DBNAME + " user=" + POSTGRES_USER + " host=" + POSTGRES_HOST + " password=" + POSTGRES_PASS + " port=" + POSTGRES_PORT)
 except:
   print "I am unable to connect to the database"
 
