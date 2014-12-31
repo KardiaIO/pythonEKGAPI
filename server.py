@@ -11,11 +11,6 @@ host = os.getenv('POSTGRES_HOST')
 password = os.getenv('POSTGRES_PASS')
 port = os.getenv('POSTGRES_PORT')
 
-myString = ("dbname=" + dbname + " user=" + user + " host=" + host + " password=" + password + " port=" + port)
-def go():
-  print myString
-
-go()
 try:
   conn = psycopg2.connect("dbname=" + dbname + " user=" + user + " host=" + host + " password=" + password + " port=" + port)
 except:
