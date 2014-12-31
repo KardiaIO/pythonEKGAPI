@@ -1,2 +1,3 @@
 zerorpc
 psycopg2
+os
