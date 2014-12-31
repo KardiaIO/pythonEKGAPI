@@ -10,7 +10,6 @@ POSTGRES_USER = os.getenv('POSTGRES_USER')
 POSTGRES_HOST = os.getenv('POSTGRES_HOST')
 POSTGRES_PASS = os.getenv('POSTGRES_PASS')
 POSTGRES_PORT = os.getenv('POSTGRES_PORT')
-fiveThousand = 5000
 
 try:
   conn = psycopg2.connect("dbname=" + POSTGRES_DBNAME + " user=" + POSTGRES_USER + " host=" + POSTGRES_HOST + " password=" + POSTGRES_PASS + " port=" + POSTGRES_PORT)
@@ -42,5 +41,5 @@ class rpc(object):
         return connect()   
 
 server = zerorpc.Server(rpc(), heartbeat=None)
-server.bind("tcp://*:" + os.getenv('PORT') or fiveThousand)
+server.bind("tcp://*:5000")
 server.run()
