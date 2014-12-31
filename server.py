@@ -3,7 +3,7 @@
 
 import zerorpc
 import psycopg2
-# from mssql import connect
+# from mssql import connec t
 try:
     conn = psycopg2.connect("dbname='ddkcjaloac929s' user='jtxtmxsnjirunx' host='ec2-54-83-23-169.compute-1.amazonaws.com' password='q8ojXZQTlVDqQSPy3y48CIRK0S' port='5432'")
 except:
