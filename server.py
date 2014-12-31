@@ -20,10 +20,6 @@ def connect():
   rows = cursor.fetchall()
   return rows
 
-
-
-
-
 class rpc(object):
     print "Python server ENGAGE!"
 

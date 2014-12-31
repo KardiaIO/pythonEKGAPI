@@ -1,0 +1,2 @@
+zerorpc
+psycopg2
