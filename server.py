@@ -4,7 +4,8 @@
 import zerorpc
 import psycopg2
 import os
-# from mssql import connect
+import json
+
 POSTGRES_DBNAME = os.getenv('POSTGRES_DBNAME')
 POSTGRES_USER = os.getenv('POSTGRES_USER')
 POSTGRES_HOST = os.getenv('POSTGRES_HOST')
@@ -16,9 +17,8 @@ try:
 except:
   print "I am unable to connect to the database"
 
-def connect():  
+def connectToPG():  
   cursor = conn.cursor()
-
   try:
     print "DO YOUSE WORK?"
     cursor.execute(" " "SELECT * from users" " ")
@@ -28,17 +28,32 @@ def connect():
   rows = cursor.fetchall()
   return rows
 
+def getStatusCode(self, arg):
+  amplitude = float(arg)
+  if amplitude > 3.0:
+    statusCode = "404"
+  else:
+    statusCode = "200"
+
+  return statusCode
+
 class rpc(object):
     print "Python server ENGAGE!"
 
     # receives confirmation from Node server 
     def hello(self, name):
-        print "Node greeting request received, response sending..."
-        return "This is python. Hello, %s" % name
+      print "Node greeting request received, response sending..."
+      return "This is python. Hello, %s" % name
 
-    def nodeRequest(self):
-        print "Node data request received, response sending..."
-        return connect()   
+    def crunch(self, data):
+      dataObj = json.loads(data)
+      statusCode = getStatusCode(self, dataObj['amplitude'])
+      return statusCode
+
+    # Used for Postgres Connection
+    # def nodeRequest(self):
+    #   print "Node data request received, response sending..."
+    #   return connectToPG() 
 
 server = zerorpc.Server(rpc(), heartbeat=None)
 server.bind("tcp://*:5000")
