@@ -30,13 +30,12 @@ def connectToPG():
   rows = cursor.fetchall()
   return rows
 
-# Analyze Data
-RWaveAnalyzer = RWaveAnalysis(14, .3)
+# Create Analyzer
+rWaveNotch = 4.7, thresholdForFeatureCount = 14, timeSpan = .3
+RWaveAnalyzer = RWaveAnalysis(rWaveNotch, thresholdForFeatureCount, timeSpan)
 
 def analyzeData(data):
-  if (data['amplitude'] > 3.0)
-    RWaveAnalyzer.addToBuffer(data['time'])
-  return RWaveAnalyzer.checkBuffer()
+  return RWaveAnalyzer.analyze(data)
  
 # Connect to Server
 class rpc(object):
