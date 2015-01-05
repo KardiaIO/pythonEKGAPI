@@ -5,7 +5,9 @@ import zerorpc
 import psycopg2
 import os
 import json
+from RWaveAnalysis import RWaveAnalysis
 
+# Connect to Postgres 
 POSTGRES_DBNAME = os.getenv('POSTGRES_DBNAME')
 POSTGRES_USER = os.getenv('POSTGRES_USER')
 POSTGRES_HOST = os.getenv('POSTGRES_HOST')
@@ -28,15 +30,15 @@ def connectToPG():
   rows = cursor.fetchall()
   return rows
 
-def getStatusCode(self, arg):
-  amplitude = float(arg)
-  if amplitude > 3.0:
-    statusCode = "404"
-  else:
-    statusCode = "200"
+# Analyze Data
+RWaveAnalyzer = RWaveAnalysis(14, .3)
 
-  return statusCode
-
+def analyzeData(data):
+  if (data['amplitude'] > 3.0)
+    RWaveAnalyzer.addToBuffer(data['time'])
+  return RWaveAnalyzer.checkBuffer()
+ 
+# Connect to Server
 class rpc(object):
     print "Python server ENGAGE!"
 
@@ -47,8 +49,7 @@ class rpc(object):
 
     def crunch(self, data):
       dataObj = json.loads(data)
-      statusCode = getStatusCode(self, dataObj['amplitude'])
-      return statusCode
+      return analyzeData(dataObj)
 
     # Used for Postgres Connection
     # def nodeRequest(self):
