@@ -30,7 +30,7 @@ def connectToPG():
 
 def getStatusCode(self, arg):
   amplitude = float(arg)
-  if amplitude > 3.0:
+  if amplitude > 4.9:
     statusCode = "404"
   else:
     statusCode = "200"
@@ -46,8 +46,9 @@ class rpc(object):
       return "This is python. Hello, %s" % name
 
     def crunch(self, data):
-      dataObj = json.loads(data)
-      statusCode = getStatusCode(self, dataObj['amplitude'])
+      jsonObj = json.loads(data);
+      print jsonObj
+      statusCode = getStatusCode(self, jsonObj)
       return statusCode
 
     # Used for Postgres Connection
@@ -55,6 +56,6 @@ class rpc(object):
     #   print "Node data request received, response sending..."
     #   return connectToPG() 
 
-server = zerorpc.Server(rpc(), heartbeat=None)
+server = zerorpc.Server(rpc())
 server.bind("tcp://*:5000")
 server.run()
