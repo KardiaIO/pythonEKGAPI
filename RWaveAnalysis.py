@@ -1,18 +1,19 @@
-from operator import attrgetter
 import collections
 import datetime
 import isodate
 
 class RWaveAnalysis:
 
-  def __init__(self, notch, threshold, timespan, bufferLength):
+  def __init__(self, notch, featureThreshold, timespan, bufferLength):
     self.notch = notch
-    self.threshold = threshold
+    self.featureThreshold = featureThreshold
     self.timespan = timespan
     self.bufferLength = bufferLength
     self.rWaveBuffer = collections.deque()
     self.rWaveMaxBuffer = []
     self.significantFeatures = 0
+    self.captureStream = False
+    self.counter = 0
 
   def addToBuffer(self, timeStamp):
     dateTimeObj = timeStamp #isodate.parse_datetime(timeStamp)
@@ -25,9 +26,9 @@ class RWaveAnalysis:
       diff = (self.rWaveBuffer[idx+1] - self.rWaveBuffer[idx]) #.total_seconds()
       if (diff < self.timespan):
         self.significantFeatures += 1
-    if self.significantFeatures > self.threshold:
+    if self.significantFeatures > self.featureThreshold:
       self.resetFeatures()
-      print '404'
+      #print '404'
       return '404'
     else:
       self.resetFeatures()
@@ -35,17 +36,24 @@ class RWaveAnalysis:
       return '200'
 
   def findRWavePeak(self, data):
-    if data['amplitude'] > self.notch:
-      self.rWaveMaxBuffer.append(data);
+    if data['amplitude'] > self.notch and not self.captureStream:
+      # print 'START CAPTURE>>>>>>>>>>>>>>>>>>>>>'
+      self.captureStream = True
+      self.rWaveMaxBuffer.append(data)
+    elif self.captureStream and data['amplitude'] > self.notch - .3:
+      self.rWaveMaxBuffer.append(data)      
     elif len(self.rWaveMaxBuffer):
+      # print 'END CAPTURE>>>>>>>>>>>>>>>>>>>>>>>'
+      self.captureStream = False
       rWavePeakTime = max(self.rWaveMaxBuffer, key=lambda x: x['amplitude'])['time']
-      print 'rWaveMaxBuffer:', self.rWaveMaxBuffer
-      print 'rWavePeakTime:', rWavePeakTime
+      # print 'rWaveMaxBuffer:', self.rWaveMaxBuffer
+      # print 'rWavePeakTime:', rWavePeakTime
       self.addToBuffer(rWavePeakTime)
       self.resetRWaveMaxBuffer()
 
   def analyze(self, data):
     self.findRWavePeak(data)
+    # self.drawData(data)
     return self.checkBuffer()
 
   def resetFeatures(self):
@@ -53,3 +61,13 @@ class RWaveAnalysis:
 
   def resetRWaveMaxBuffer(self):
     self.rWaveMaxBuffer = []
+
+  # visualize data with console graph, adjusted by offset
+  def drawData(self, data):
+    offset = 90
+    # count datapoints
+    print self.counter, 
+    for idx in xrange(int(data['amplitude'] ** 3 - offset)): 
+      print('>'),
+    print('\n'),
+    self.counter += 1

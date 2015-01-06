@@ -31,11 +31,11 @@ def connectToPG():
   return rows
 
 # Create Analyzer
-rWaveNotch = 4.7, thresholdForFeatureCount = 14, timeSpan = .3
-RWaveAnalyzer = RWaveAnalysis(rWaveNotch, thresholdForFeatureCount, timeSpan)
-
-def analyzeData(data):
-  return RWaveAnalyzer.analyze(data)
+rWaveNotch = 4.9 # amplitude
+thresholdForFeatureCount = 14 # number of features that indicate abnormality
+timeSpan = .3 # seconds in between r-wave peaks that would indicate abnormality 
+bufferLength = 60 # number of records to check for features
+RWaveAnalyzer = RWaveAnalysis(rWaveNotch, thresholdForFeatureCount, timeSpan, bufferLength)
  
 # Connect to Server
 class rpc(object):
@@ -48,7 +48,7 @@ class rpc(object):
 
     def crunch(self, data):
       dataObj = json.loads(data)
-      return analyzeData(dataObj)
+      return RWaveAnalyzer.analyze(dataObj)
 
     # Used for Postgres Connection
     # def nodeRequest(self):
