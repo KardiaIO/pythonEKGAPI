@@ -37,7 +37,6 @@ timeSpan = .8 # seconds in between r-wave peaks that would indicate abnormality
 bufferLength = 12 # number of records to check for features
 RWaveAnalyzer = RWaveAnalysis(rWaveNotch, thresholdForFeatureCount, timeSpan, bufferLength)
  
-# Connect to Server
 class rpc(object):
     print "Python server ENGAGE!"
 
