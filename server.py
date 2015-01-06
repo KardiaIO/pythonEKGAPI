@@ -5,7 +5,9 @@ import zerorpc
 import psycopg2
 import os
 import json
+from RWaveAnalysis import RWaveAnalysis
 
+# Connect to Postgres 
 POSTGRES_DBNAME = os.getenv('POSTGRES_DBNAME')
 POSTGRES_USER = os.getenv('POSTGRES_USER')
 POSTGRES_HOST = os.getenv('POSTGRES_HOST')
@@ -28,15 +30,14 @@ def connectToPG():
   rows = cursor.fetchall()
   return rows
 
-def getStatusCode(self, arg):
-  amplitude = float(arg)
-  if amplitude > 4.9:
-    statusCode = "404"
-  else:
-    statusCode = "200"
-
-  return statusCode
-
+# Create Analyzer
+rWaveNotch = 4.9 # amplitude
+thresholdForFeatureCount = 14 # number of features that indicate abnormality
+timeSpan = .3 # seconds in between r-wave peaks that would indicate abnormality 
+bufferLength = 60 # number of records to check for features
+RWaveAnalyzer = RWaveAnalysis(rWaveNotch, thresholdForFeatureCount, timeSpan, bufferLength)
+ 
+# Connect to Server
 class rpc(object):
     print "Python server ENGAGE!"
 
@@ -46,10 +47,8 @@ class rpc(object):
       return "This is python. Hello, %s" % name
 
     def crunch(self, data):
-      jsonObj = json.loads(data);
-      print jsonObj
-      statusCode = getStatusCode(self, jsonObj)
-      return statusCode
+      dataObj = json.loads(data)
+      return RWaveAnalyzer.analyze(dataObj)
 
     # Used for Postgres Connection
     # def nodeRequest(self):
