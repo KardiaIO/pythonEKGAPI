@@ -1,6 +1,3 @@
 zerorpc
 psycopg2
-os
-collections
-datetime
 isodate
