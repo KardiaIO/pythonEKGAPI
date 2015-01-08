@@ -21608,17 +21608,17 @@ sampleData = [
 ]
 
 # Create Analyzer
-rWaveNotch = 4.9
-thresholdForFeatureCount = 14
-timeSpan = .3
-bufferLength = 60
+rWaveNotch = 4.9 # amplitude
+thresholdForFeatureCount = 14 # number of features in buffer that indicate abnormality
+timeSpan = .3 # seconds in between r-wave peaks that would indicate abnormality 
+bufferLength = 60 # number of records in to check for features
 RWaveAnalyzer = RWaveAnalysis(rWaveNotch, thresholdForFeatureCount, timeSpan, bufferLength)
 
 
 def main():
   index = 0
   while index < len(sampleData):
-    RWaveAnalyzer.analyze(sampleData[index])
+    print RWaveAnalyzer.analyze(sampleData[index])
     index+=1
 
-main()
+main() 
