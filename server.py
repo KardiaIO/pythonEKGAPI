@@ -7,7 +7,7 @@ import os
 import json
 from RWaveAnalysis import RWaveAnalysis
 
-# Connect to Postgres 
+# Connect to Postgres.  Use Foreman to get Environment Variables (foreman start in terminal). 
 POSTGRES_DBNAME = os.getenv('POSTGRES_DBNAME')
 POSTGRES_USER = os.getenv('POSTGRES_USER')
 POSTGRES_HOST = os.getenv('POSTGRES_HOST')
@@ -56,5 +56,5 @@ class rpc(object):
     #   return connectToPG() 
 
 server = zerorpc.Server(rpc())
-server.bind("tcp://*:5000")
+server.bind("tcp://*:8000")
 server.run()
