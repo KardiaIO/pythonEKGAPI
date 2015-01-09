@@ -32,18 +32,17 @@ def connectToPG():
 
 # Create Analyzer
 rWaveNotch = 4.9 # amplitude
-thresholdForFeatureCount = 14 # number of features that indicate abnormality
-timeSpan = .3 # seconds in between r-wave peaks that would indicate abnormality 
-bufferLength = 60 # number of records to check for features
+thresholdForFeatureCount = 6 # total number of features in buffer that indicate abnormality
+timeSpan = .8 # seconds in between r-wave peaks that would indicate abnormality 
+bufferLength = 12 # number of records to check for features
 RWaveAnalyzer = RWaveAnalysis(rWaveNotch, thresholdForFeatureCount, timeSpan, bufferLength)
  
-# Connect to Server
 class rpc(object):
     print "Python server ENGAGE!"
 
     # receives confirmation from Node server 
     def hello(self, name):
-      print "Node greeting request received, response sending..."
+      # print "Node greeting request received, response sending..."
       return "This is python. Hello, %s" % name
 
     def crunch(self, data):
