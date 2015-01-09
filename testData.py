@@ -21618,7 +21618,7 @@ RWaveAnalyzer = RWaveAnalysis(rWaveNotch, thresholdForFeatureCount, timeSpan, bu
 def main():
   index = 0
   while index < len(sampleData):
-    print RWaveAnalyzer.analyze(sampleData[index])
+    RWaveAnalyzer.analyze(sampleData[index])
     index+=1
 
 main() 
