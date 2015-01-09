@@ -21620,5 +21620,4 @@ def main():
   while index < len(sampleData):
     RWaveAnalyzer.analyze(sampleData[index])
     index+=1
-
-main() 
+main()
