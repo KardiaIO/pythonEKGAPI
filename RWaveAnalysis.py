@@ -10,11 +10,10 @@ class RWaveAnalysis:
     self.timespan = timespan
     self.bufferLength = bufferLength
     self.rWaveBuffer = collections.deque()
-    # self.rWaveBuffer.append(datetime.datetime(1,1,1,1))
     self.rWaveMaxBuffer = []
     self.captureStream = False
-    self.heartRate = 60
-
+    self.heartRate = '65'
+    
   def addToBuffer(self, timeStamp):
     dateTimeObj = isodate.parse_datetime(timeStamp).replace(tzinfo=None)
     self.rWaveBuffer.append(dateTimeObj)
@@ -22,10 +21,9 @@ class RWaveAnalysis:
       self.rWaveBuffer.popleft()
 
   def checkBuffer(self):
-    # print self.rWaveBuffer
     timeDiffs = [(self.rWaveBuffer[i+1] - self.rWaveBuffer[i]).total_seconds() for i in range(len(self.rWaveBuffer)-1)]
     self.getHeartRate(timeDiffs)
-    significantFeatures = [timeDiffs[i] for i in range(len(timeDiffs)) if timeDiffs[i] < self.featureThreshold]
+    significantFeatures = [timeDiffs[i] for i in range(len(timeDiffs)) if timeDiffs[i] < self.timespan]
     if len(significantFeatures) > self.featureThreshold:
       self.resetFeatures()
       return {'statusCode':'404', 'heartRate': self.heartRate}
@@ -45,22 +43,18 @@ class RWaveAnalysis:
       self.captureStream = False
       rWavePeakTime = max(self.rWaveMaxBuffer, key=lambda x: float(x['amplitude']))['time']
       self.addToBuffer(rWavePeakTime)
-      print rWavePeakTime
       self.resetRWaveMaxBuffer()
 
   def analyze(self, data):
     self.findRWavePeak(data)
     # self.drawData(data)
-    print self.heartRate
     return self.checkBuffer()
 
   def getHeartRate(self, timeDiffs):
-    def flatten(a, b):
-      return a + b
-    if not timeDiffs:
+    if not timeDiffs or len(timeDiffs) < 5:
       self.heartRate = self.heartRate
     else:
-      self.heartRate = format(60 / (reduce(flatten, timeDiffs) / len(timeDiffs)), '.0f')
+      self.heartRate = format(60 / (reduce(lambda x, y: x + y, timeDiffs) / len(timeDiffs)), '.0f')
 
   def resetFeatures(self):
     self.significantFeatures = 0
