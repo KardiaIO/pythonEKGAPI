@@ -37,7 +37,7 @@ class RWaveAnalysis:
       return {'statusCode':'200', 'heartRate': self.heartRate}
 
   def findRWavePeak(self, data):
-    # catches cases where incoming data has abnormal amplitude buildup from data pipe, i.e. data['amplitude'] = 4.512.2553.233
+    # catches cases where incoming data has abnormal amplitude buildup from race conditions on the hardware, i.e. data['amplitude'] = 4.512.2553.233
     if len(data['amplitude']) > 5:
       data['amplitude'] = data['amplitude'][0:5]
     # starts recording when notch threshold is broken. Commented part can be used for real data and adjusted for accuracy
@@ -56,6 +56,7 @@ class RWaveAnalysis:
 
   def analyze(self, data):
     self.findRWavePeak(data)
+    # uncomment below for ASCII data graph in console
     # self.drawData(data)
     return self.checkBuffer()
 
@@ -72,7 +73,7 @@ class RWaveAnalysis:
   def resetRWaveMaxBuffer(self):
     self.rWaveMaxBuffer = []
 
-  # visualize data with console graph, adjusted by offset
+  # visualize data with ASCII console graph, adjusted by offset
   def drawData(self, data):
     offset = 90
     for idx in xrange(int(float(data['amplitude']) ** 3 - offset)): 
